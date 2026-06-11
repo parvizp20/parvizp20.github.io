@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>روان‌یار | سامانه تخصصی روانشناسی هوشمند</title>
+    <!-- Font Awesome & Google Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header & Nav */
+        header {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(99,102,241,0.15);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #4f46e5, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .logo i {
+            background: none;
+            color: #4f46e5;
+            font-size: 1.8rem;
+            margin-left: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #334155;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #4f46e5;
+        }
+
+        .btn-outline-light {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #4f46e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            max-width: 900px;
+            margin: 0 auto 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #475569;
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        /* Grid cards */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 48px 0 24px;
+            border-right: 5px solid #4f46e5;
+            padding-right: 20px;
+        }
+
+        .grid-2col, .grid-3col {
+            display: grid;
+            gap: 30px;
+        }
+
+        .grid-3col {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+            transition: 0.25s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px rgba(79,70,229,0.12);
+            border-color: #c7d2fe;
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            color: #4f46e5;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            background: #ede9fe;
+            color: #6d28d9;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: scale(0.98);
+        }
+
+        .questionnaire-demo, .daily-check {
+            background: #f1f5f9;
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 24px;
+            border: 1px solid #cbd5e1;
+            margin-top: 8px;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 16px;
+            border-right: 4px solid #4f46e5;
+        }
+
+        footer {
+            margin-top: 70px;
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 32px 32px 0 0;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .navbar { flex-direction: column; gap: 12px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo"><i class="fas fa-brain"></i> روان‌یار</div>
+            <div class="nav-links">
+                <a href="#">خانه</a>
+                <a href="#">پرسشنامه‌ها</a>
+                <a href="#">مشاوره</a>
+                <a href="#">دوره‌ها</a>
+                <a href="#">جفت‌یابی</a>
+                <a href="#" class="btn-outline-light">ورود / ثبت‌نام</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="hero">
+        <h1>سنجش آگاهانه، رشد حرفه‌ای <br> با روان‌یار هوشمند</h1>
+        <p>پرسشنامه‌های تخصصی، مشاوره ناهمزمان، چکاپ روزانه خلق و خو، جفت‌یابی روانشناختی و دوره‌های خودیاری — همه در یک پلتفرم حرفه‌ای</p>
+        <button class="btn-primary" onclick="document.getElementById('questionnaireDemo').scrollIntoView({behavior:'smooth'})"><i class="fas fa-clipboard-list"></i> شروع پرسشنامه رایگان</button>
+    </div>
+
+    <!-- بخش ۶ ایده در قالب کارت -->
+    <div class="grid-3col">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-file-alt"></i></div>
+            <span class="badge">تفسیر خودکار</span>
+            <h3>پرسشنامه تخصصی</h3>
+            <p>سبک دلبستگی، اضطراب، شخصیت شناسی — به همراه گزارش تصویری فوری.</p>
+            <button class="btn-primary" onclick="openQuestionnaireModal()" style="margin-top:12px">شروع رایگان <i class="fas fa-arrow-left"></i></button>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-comment-dots"></i></div>
+            <span class="badge">پاسخ تضمینی ۲۴ ساعته</span>
+            <h3>مشاوره ناهمزمان</h3>
+            <p>سوال خود را تایپ کنید، روانشناس ظرف ۲۴ ساعت پاسخ حرفه‌ای کوتاه می‌دهد. هر پیام ۲۵ هزار تومان.</p>
+            <button class="btn-primary" onclick="alert('🔒 لطفا ثبت‌نام کنید: نسخه نمایشی آماده است. در نسخه نهایی، درگاه پرداخت متصل می‌شود.')">درخواست مشاوره</button>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
+            <span class="badge">خودیاری</span>
+            <h3>دوره‌های مدیریت استرس</h3>
+            <p>۴ هفته، ویدیو + پرسشنامه هفتگی. دوره «ذهن آگاه در شلوغی» — ۳۵۰ هزار تومان</p>
+            <button class="btn-primary" onclick="alert('🎬 صفحه ثبت‌نام دوره به زودی؛ نسخه نمایشی آماده.')">خرید دوره</button>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+            <span class="badge">گیمیفیکیشن</span>
+            <h3>بازیوارسازی سنجش</h3>
+            <p>سناریوهای تصویری جذاب به جای سوال خشک. تحلیل الگوی رفتاری شما.</p>
+            <button class="btn-primary" onclick="alert('🎮 نسخه بتا: به زودی بازی «انتخاب تو» منتشر می‌شود.')">شرکت در بازی</button>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-heart"></i></div>
+            <span class="badge">سازگاری علمی</span>
+            <h3>جفت‌یابی روانشناختی</h3>
+            <p>پرسشنامه سبک دلبستگی و ارزش‌ها، امتیاز سازگاری بدون چت مستقیم.</p>
+            <button class="btn-primary" onclick="alert('💞 هم‌آهنگ‌ساز: لطفا ابتدا در پلتفرم ثبت‌نام کامل کنید.')">بررسی سازگاری</button>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+            <span class="badge">چکاپ روزانه</span>
+            <h3>خلق و خو + گزارش هوشمند</h3>
+            <p>هر روز ۳ سوال ساده. بعد از ۷ روز هشدار روند منفی و پیشنهاد تمرین.</p>
+            <button id="dailyCheckBtn" class="btn-primary">ثبت امروز <i class="fas fa-smile"></i></button>
+        </div>
+    </div>
+
+    <!-- نمایش پرسشنامه نمونه (سبک دلبستگی) -->
+    <div id="questionnaireDemo" class="questionnaire-demo" style="margin: 40px 0 20px;">
+        <h3><i class="fas fa-clipboard-list"></i> پرسشنامه رایگان: سبک دلبستگی شما چیست؟</h3>
+        <p>به ۳ سوال پاسخ دهید (۱=کاملاً مخالف، ۵=کاملاً موافق)</p>
+        <div id="qContainer"></div>
+        <button id="submitQuiz" class="btn-primary">تفسیر نتایج</button>
+        <div id="quizResult" class="result-box" style="display:none;"></div>
+    </div>
+
+    <!-- چکاپ روزانه -->
+    <div id="dailyMoodSection" style="margin: 30px 0;">
+        <h3><i class="fas fa-chart-simple"></i> چکاپ روزانه خلق و خو (گزارش هوشمند)</h3>
+        <div class="daily-check">
+            <label>۱. کیفیت خواب دیشب:</label>
+            <select id="sleepQuality">
+                <option value="2">عالی</option>
+                <option value="1">متوسط</option>
+                <option value="0">بد</option>
+            </select>
+            <label>۲. سطح اضطراب امروز (۰ تا ۱۰):</label>
+            <input type="number" id="anxietyLevel" min="0" max="10" value="3">
+            <label>۳. احساس غالب امروز:</label>
+            <select id="dominentEmotion">
+                <option>شاد/انرژی‌بخش</option>
+                <option>خنثی/عادی</option>
+                <option>غمگین/بی حوصله</option>
+                <option>عصبانی/تحریک‌پذیر</option>
+            </select>
+            <button id="saveMoodBtn" class="btn-primary">ثبت چکاپ امروز</button>
+            <div id="moodReport" class="result-box" style="margin-top:20px;"></div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p><i class="fas fa-brain"></i> روان‌یار – پلتفرم حرفه‌ای سلامت روان و خودشناسی | تمامی حقوق محفوظ است</p>
+        <p style="margin-top: 12px;">✨ نسخه نمایشی تعاملی – برای کسب درآمد واقعی، درگاه پرداخت و پنل روانشناسان اضافه می‌شود</p>
+    </div>
+</footer>
+
+<script>
+    // ********** پرسشنامه نمونه (سبک دلبستگی) *********
+    const questions = [
+        "نزدیکی عاطفی با دیگران برام راحته.",
+        "نگرانم که دیگران من رو دوست نداشته باشند و ترکم کنند.",
+        "وقتی شریک عاطفیام از من فاصله می‌گیره خیلی ناراحت میشم."
+    ];
+    const qContainer = document.getElementById("qContainer");
+    questions.forEach((q, idx) => {
+        const div = document.createElement("div");
+        div.innerHTML = `<p>${idx+1}. ${q}</p>
+        <select id="q${idx}">
+            <option value="1">۱ - کاملاً مخالف</option>
+            <option value="2">۲</option>
+            <option value="3">۳ - نسبتاً موافق</option>
+            <option value="4">۴</option>
+            <option value="5">۵ - کاملاً موافق</option>
+        </select>`;
+        qContainer.appendChild(div);
+    });
+
+    document.getElementById("submitQuiz").onclick = () => {
+        let scores = [0,1,2].map(i => parseInt(document.getElementById(`q${i}`).value));
+        let total = scores.reduce((a,b)=>a+b,0);
+        let interpretation = "";
+        if (total <= 7) interpretation = "سبک دلبستگی **اجتنابی**: استقلال بالا، اما ممکن است صمیمیت عمیق برات دشوار باشه.";
+        else if (total <= 12) interpretation = "سبک دلبستگی **ایمن**: توانایی خوب در ایجاد روابط متوازن و صمیمی.";
+        else interpretation = "سبک دلبستگی **اضطرابی/دوسوگرا**: تمایل به نگرانی در روابط، نیاز به اطمینان‌بخشی.";
+        
+        const resultDiv = document.getElementById("quizResult");
+        resultDiv.innerHTML = `<strong>نتیجه پرسشنامه:</strong> مجموع امتیاز ${total} <br> ${interpretation}<br><small>تفسیر خودکار و کاملاً آزمایشی — برای ارزیابی واقعی با متخصص مشورت کنید.</small>`;
+        resultDiv.style.display = "block";
+    };
+
+    // ********** چکاپ روزانه + گزارش هوشمند (localStorage) *********
+    function getTodayKey() {
+        return new Date().toISOString().slice(0,10);
+    }
+
+    function saveMood() {
+        const sleep = parseInt(document.getElementById("sleepQuality").value);
+        const anxiety = parseInt(document.getElementById("anxietyLevel").value);
+        const emotion = document.getElementById("dominentEmotion").value;
+        const today = getTodayKey();
+        let moods = JSON.parse(localStorage.getItem("moodHistory")) || {};
+        moods[today] = { sleep, anxiety, emotion };
+        localStorage.setItem("moodHistory", JSON.stringify(moods));
+        showReport();
+        alert("✅ چکاپ امروز ذخیره شد.");
+    }
+
+    function showReport() {
+        const moods = JSON.parse(localStorage.getItem("moodHistory")) || {};
+        const last7 = [];
+        const days = Object.keys(moods).sort().reverse().slice(0,7);
+        for(let d of days) last7.push(moods[d]);
+        if(last7.length === 0) {
+            document.getElementById("moodReport").innerHTML = "📊 هنوز داده‌ای ثبت نشده. حداقل یک روز ثبت کن تا گزارش هوشمند نمایش داده شود.";
+            return;
+        }
+        let highAnxietyCount = last7.filter(m => m.anxiety >= 7).length;
+        let sadCount = last7.filter(m => m.emotion.includes("غمگین")).length;
+        let warning = "";
+        if(highAnxietyCount >= 3) warning = "⚠️ **هشدار**: در ۷ روز اخیر، ۳ روز یا بیشتر اضطراب بالای ۷ داشتی. پیشنهاد تمرین تنفس عمیق.";
+        else if(sadCount >= 3) warning = "🧘 توصیه به مراقبه و مراجعه به مشاور روانشناس: چند روز متوالی احساس غم غالب بوده.";
+        else warning = "✅ روند خلق و خو در وضعیت عادی است. به چکاپ روزانه ادامه بده.";
+        
+        document.getElementById("moodReport").innerHTML = `<strong>📈 گزارش هوشمند (۷ روز اخیر):</strong><br> روزهای ثبت شده: ${days.length} روز <br> تعداد روزهای با اضطراب بالا: ${highAnxietyCount}<br> ${warning}`;
+    }
+
+    document.getElementById("saveMoodBtn").onclick = saveMood;
+    document.getElementById("dailyCheckBtn").onclick = () => { document.getElementById("dailyMoodSection").scrollIntoView({behavior:"smooth"}); };
+    // نمایش اولیه گزارش در صورت وجود اطلاعات
+    if(localStorage.getItem("moodHistory")) showReport();
+    else document.getElementById("moodReport").innerHTML = "برای شروع چکاپ امروز را ثبت کنید.";
+
+    // تابع بازشو برای پرسشنامه
+    window.openQuestionnaireModal = function(){
+        document.getElementById("questionnaireDemo").scrollIntoView({behavior:"smooth"});
+    }
+</script>
+</body>
+</html>
