@@ -2,349 +2,302 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>روان‌یار | سامانه تخصصی روانشناسی هوشمند</title>
-    <!-- Font Awesome & Google Font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>روان‌یار | سیستم حرفه‌ای روانشناسی</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
-            color: #1e293b;
-            line-height: 1.5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 24px;
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-
-        /* Header & Nav */
-        header {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(99,102,241,0.15);
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
+        .auth-card h2 { margin-bottom: 30px; color: #333; text-align: center; }
+        .auth-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .switch-auth { text-align: center; margin-top: 20px; color: #667eea; cursor: pointer; }
+        .error { color: red; font-size: 14px; margin-top: 10px; text-align: center; }
+        .success { color: green; font-size: 14px; margin-top: 10px; text-align: center; }
+        
+        .dashboard { display: none; }
         .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            flex-wrap: wrap;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #4f46e5, #a855f7);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.02em;
+        .logo { font-size: 28px; font-weight: bold; color: #667eea; }
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
         }
-
-        .logo i {
-            background: none;
-            color: #4f46e5;
-            font-size: 1.8rem;
-            margin-left: 6px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 28px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 500;
-            color: #334155;
-            transition: 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #4f46e5;
-        }
-
-        .btn-outline-light {
+        .welcome-card {
             background: white;
-            border: 1px solid #cbd5e1;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 60px 0 40px;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
             text-align: center;
         }
-
-        .hero h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1e293b, #4f46e5);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            max-width: 900px;
-            margin: 0 auto 20px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #475569;
-            max-width: 700px;
-            margin: 0 auto 32px;
-        }
-
-        /* Grid cards */
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 48px 0 24px;
-            border-right: 5px solid #4f46e5;
-            padding-right: 20px;
-        }
-
-        .grid-2col, .grid-3col {
-            display: grid;
-            gap: 30px;
-        }
-
         .grid-3col {
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
-
         .card {
             background: white;
-            border-radius: 32px;
-            padding: 28px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
-            transition: 0.25s ease;
-            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-align: center;
         }
-
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 35px rgba(79,70,229,0.12);
-            border-color: #c7d2fe;
-        }
-
-        .card-icon {
-            font-size: 2.8rem;
-            color: #4f46e5;
+        .card:hover { transform: translateY(-5px); }
+        .card-icon { font-size: 40px; color: #667eea; margin-bottom: 15px; }
+        .questionnaire-box, .mood-box, .history-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 20px;
         }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 12px;
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
         }
-
-        .badge {
-            background: #ede9fe;
-            color: #6d28d9;
-            border-radius: 30px;
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 16px;
+        .history-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
         }
-
         .btn-primary {
-            background: #4f46e5;
+            background: #667eea;
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 600;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary:hover {
-            background: #4338ca;
-            transform: scale(0.98);
-        }
-
-        .questionnaire-demo, .daily-check {
-            background: #f1f5f9;
-            border-radius: 24px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 24px;
-            border: 1px solid #cbd5e1;
-            margin-top: 8px;
-            margin-bottom: 16px;
-            font-family: inherit;
-        }
-
-        .result-box {
-            background: white;
-            border-radius: 20px;
-            padding: 16px;
-            margin-top: 16px;
-            border-right: 4px solid #4f46e5;
-        }
-
-        footer {
-            margin-top: 70px;
-            background: #0f172a;
-            color: #94a3b8;
-            padding: 40px 0;
-            text-align: center;
-            border-radius: 32px 32px 0 0;
-        }
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .navbar { flex-direction: column; gap: 12px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-<header>
+
+<!-- صفحه احراز هویت -->
+<div id="authContainer" class="auth-container">
+    <div class="auth-card">
+        <h2 id="authTitle">ورود به روان‌یار</h2>
+        <input type="email" id="email" placeholder="ایمیل">
+        <input type="password" id="password" placeholder="رمز عبور">
+        <button id="submitAuthBtn">ورود</button>
+        <div id="authMessage"></div>
+        <div class="switch-auth" id="switchAuthBtn">ثبت‌نام نکرده‌اید؟ ثبت‌نام کنید</div>
+    </div>
+</div>
+
+<!-- داشبورد کاربری -->
+<div id="dashboard" class="dashboard">
     <div class="container">
         <div class="navbar">
             <div class="logo"><i class="fas fa-brain"></i> روان‌یار</div>
-            <div class="nav-links">
-                <a href="#">خانه</a>
-                <a href="#">پرسشنامه‌ها</a>
-                <a href="#">مشاوره</a>
-                <a href="#">دوره‌ها</a>
-                <a href="#">جفت‌یابی</a>
-                <a href="#" class="btn-outline-light">ورود / ثبت‌نام</a>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        </div>
+        
+        <div class="welcome-card">
+            <h2 id="welcomeMessage">خوش آمدید!</h2>
+            <p>به سیستم حرفه‌ای روانشناسی خوش آمدید. تمام نتایج شما در سرور ذخیره می‌شود.</p>
+        </div>
+        
+        <div class="grid-3col">
+            <div class="card" onclick="showQuestionnaire()">
+                <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                <h3>پرسشنامه سبک دلبستگی</h3>
+                <p>تفسیر حرفه‌ای و ذخیره در حساب شما</p>
+            </div>
+            <div class="card" onclick="showMoodCheck()">
+                <div class="card-icon"><i class="fas fa-smile"></i></div>
+                <h3>چکاپ روزانه خلق و خو</h3>
+                <p>ثبت و مشاهده روند احساسات</p>
+            </div>
+            <div class="card" onclick="showHistory()">
+                <div class="card-icon"><i class="fas fa-history"></i></div>
+                <h3>تاریخچه من</h3>
+                <p>مشاهده تمام نتایج قبلی</p>
             </div>
         </div>
+        
+        <div id="dynamicContent"></div>
     </div>
-</header>
-
-<main class="container">
-    <div class="hero">
-        <h1>سنجش آگاهانه، رشد حرفه‌ای <br> با روان‌یار هوشمند</h1>
-        <p>پرسشنامه‌های تخصصی، مشاوره ناهمزمان، چکاپ روزانه خلق و خو، جفت‌یابی روانشناختی و دوره‌های خودیاری — همه در یک پلتفرم حرفه‌ای</p>
-        <button class="btn-primary" onclick="document.getElementById('questionnaireDemo').scrollIntoView({behavior:'smooth'})"><i class="fas fa-clipboard-list"></i> شروع پرسشنامه رایگان</button>
-    </div>
-
-    <!-- بخش ۶ ایده در قالب کارت -->
-    <div class="grid-3col">
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-file-alt"></i></div>
-            <span class="badge">تفسیر خودکار</span>
-            <h3>پرسشنامه تخصصی</h3>
-            <p>سبک دلبستگی، اضطراب، شخصیت شناسی — به همراه گزارش تصویری فوری.</p>
-            <button class="btn-primary" onclick="openQuestionnaireModal()" style="margin-top:12px">شروع رایگان <i class="fas fa-arrow-left"></i></button>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-comment-dots"></i></div>
-            <span class="badge">پاسخ تضمینی ۲۴ ساعته</span>
-            <h3>مشاوره ناهمزمان</h3>
-            <p>سوال خود را تایپ کنید، روانشناس ظرف ۲۴ ساعت پاسخ حرفه‌ای کوتاه می‌دهد. هر پیام ۲۵ هزار تومان.</p>
-            <button class="btn-primary" onclick="alert('🔒 لطفا ثبت‌نام کنید: نسخه نمایشی آماده است. در نسخه نهایی، درگاه پرداخت متصل می‌شود.')">درخواست مشاوره</button>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
-            <span class="badge">خودیاری</span>
-            <h3>دوره‌های مدیریت استرس</h3>
-            <p>۴ هفته، ویدیو + پرسشنامه هفتگی. دوره «ذهن آگاه در شلوغی» — ۳۵۰ هزار تومان</p>
-            <button class="btn-primary" onclick="alert('🎬 صفحه ثبت‌نام دوره به زودی؛ نسخه نمایشی آماده.')">خرید دوره</button>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-gamepad"></i></div>
-            <span class="badge">گیمیفیکیشن</span>
-            <h3>بازیوارسازی سنجش</h3>
-            <p>سناریوهای تصویری جذاب به جای سوال خشک. تحلیل الگوی رفتاری شما.</p>
-            <button class="btn-primary" onclick="alert('🎮 نسخه بتا: به زودی بازی «انتخاب تو» منتشر می‌شود.')">شرکت در بازی</button>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-heart"></i></div>
-            <span class="badge">سازگاری علمی</span>
-            <h3>جفت‌یابی روانشناختی</h3>
-            <p>پرسشنامه سبک دلبستگی و ارزش‌ها، امتیاز سازگاری بدون چت مستقیم.</p>
-            <button class="btn-primary" onclick="alert('💞 هم‌آهنگ‌ساز: لطفا ابتدا در پلتفرم ثبت‌نام کامل کنید.')">بررسی سازگاری</button>
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-            <span class="badge">چکاپ روزانه</span>
-            <h3>خلق و خو + گزارش هوشمند</h3>
-            <p>هر روز ۳ سوال ساده. بعد از ۷ روز هشدار روند منفی و پیشنهاد تمرین.</p>
-            <button id="dailyCheckBtn" class="btn-primary">ثبت امروز <i class="fas fa-smile"></i></button>
-        </div>
-    </div>
-
-    <!-- نمایش پرسشنامه نمونه (سبک دلبستگی) -->
-    <div id="questionnaireDemo" class="questionnaire-demo" style="margin: 40px 0 20px;">
-        <h3><i class="fas fa-clipboard-list"></i> پرسشنامه رایگان: سبک دلبستگی شما چیست؟</h3>
-        <p>به ۳ سوال پاسخ دهید (۱=کاملاً مخالف، ۵=کاملاً موافق)</p>
-        <div id="qContainer"></div>
-        <button id="submitQuiz" class="btn-primary">تفسیر نتایج</button>
-        <div id="quizResult" class="result-box" style="display:none;"></div>
-    </div>
-
-    <!-- چکاپ روزانه -->
-    <div id="dailyMoodSection" style="margin: 30px 0;">
-        <h3><i class="fas fa-chart-simple"></i> چکاپ روزانه خلق و خو (گزارش هوشمند)</h3>
-        <div class="daily-check">
-            <label>۱. کیفیت خواب دیشب:</label>
-            <select id="sleepQuality">
-                <option value="2">عالی</option>
-                <option value="1">متوسط</option>
-                <option value="0">بد</option>
-            </select>
-            <label>۲. سطح اضطراب امروز (۰ تا ۱۰):</label>
-            <input type="number" id="anxietyLevel" min="0" max="10" value="3">
-            <label>۳. احساس غالب امروز:</label>
-            <select id="dominentEmotion">
-                <option>شاد/انرژی‌بخش</option>
-                <option>خنثی/عادی</option>
-                <option>غمگین/بی حوصله</option>
-                <option>عصبانی/تحریک‌پذیر</option>
-            </select>
-            <button id="saveMoodBtn" class="btn-primary">ثبت چکاپ امروز</button>
-            <div id="moodReport" class="result-box" style="margin-top:20px;"></div>
-        </div>
-    </div>
-</main>
-
-<footer>
-    <div class="container">
-        <p><i class="fas fa-brain"></i> روان‌یار – پلتفرم حرفه‌ای سلامت روان و خودشناسی | تمامی حقوق محفوظ است</p>
-        <p style="margin-top: 12px;">✨ نسخه نمایشی تعاملی – برای کسب درآمد واقعی، درگاه پرداخت و پنل روانشناسان اضافه می‌شود</p>
-    </div>
-</footer>
+</div>
 
 <script>
-    // ********** پرسشنامه نمونه (سبک دلبستگی) *********
+// ============ تنظیمات Supabase (مقادیر شما) ============
+const SUPABASE_URL = "https://xwaismoujsjoqzecdpis.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_AqfVb3742e1e-JjPmHI4ww_JIgGM0Sc";
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+let authMode = "login";
+
+async function checkSession() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        currentUser = user;
+        showDashboard();
+    } else {
+        showAuth();
+    }
+}
+
+async function signUp(email, password) {
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            emailRedirectTo: "https://parvizp20.github.io"
+        }
+    });
+    if (error) throw error;
+    return data;
+}
+
+async function signIn(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+    if (error) throw error;
+    return data;
+}
+
+async function signOut() {
+    await supabase.auth.signOut();
+    currentUser = null;
+    showAuth();
+}
+
+async function saveQuestionnaireResult(quizType, score, interpretation, answers) {
+    const { error } = await supabase
+        .from('questionnaire_results')
+        .insert([{
+            user_id: currentUser.id,
+            quiz_type: quizType,
+            score: score,
+            interpretation: interpretation,
+            answers: answers
+        }]);
+    if (error) console.error("خطا در ذخیره:", error);
+}
+
+async function saveDailyCheck(sleepQuality, anxietyLevel, emotion) {
+    const { error } = await supabase
+        .from('daily_checks')
+        .insert([{
+            user_id: currentUser.id,
+            sleep_quality: sleepQuality,
+            anxiety_level: anxietyLevel,
+            dominant_emotion: emotion,
+            check_date: new Date().toISOString().split('T')[0]
+        }]);
+    if (error) console.error("خطا:", error);
+}
+
+async function loadHistory() {
+    const [quizRes, moodRes] = await Promise.all([
+        supabase.from('questionnaire_results').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }),
+        supabase.from('daily_checks').select('*').eq('user_id', currentUser.id).order('check_date', { ascending: false })
+    ]);
+    return { quizzes: quizRes.data || [], moods: moodRes.data || [] };
+}
+
+function showAuth() {
+    document.getElementById("authContainer").style.display = "flex";
+    document.getElementById("dashboard").style.display = "none";
+}
+
+function showDashboard() {
+    document.getElementById("authContainer").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("welcomeMessage").innerHTML = `خوش آمدید ${currentUser.email} <i class="fas fa-heart" style="color:#ec489a"></i>`;
+    showDefaultContent();
+}
+
+function showDefaultContent() {
+    document.getElementById("dynamicContent").innerHTML = `
+        <div class="history-card">
+            <h3><i class="fas fa-chart-line"></i> خلاصه امروز</h3>
+            <p>از منوی بالا یکی از گزینه‌ها را انتخاب کنید:</p>
+            <ul style="margin-top:15px; margin-right:20px">
+                <li>📋 پرسشنامه سبک دلبستگی</li>
+                <li>😊 چکاپ روزانه خلق و خو</li>
+                <li>📜 تاریخچه کامل فعالیت‌ها</li>
+            </ul>
+        </div>
+    `;
+}
+
+function showQuestionnaire() {
+    document.getElementById("dynamicContent").innerHTML = `
+        <div class="questionnaire-box">
+            <h3><i class="fas fa-clipboard-list"></i> پرسشنامه سبک دلبستگی</h3>
+            <p>به سوالات پاسخ دهید (۱=کاملاً مخالف، ۵=کاملاً موافق)</p>
+            <div id="qContainer"></div>
+            <button id="submitQuizBtn" class="btn-primary">ثبت و ذخیره نتیجه</button>
+            <div id="quizResult"></div>
+        </div>
+    `;
+    
     const questions = [
-        "نزدیکی عاطفی با دیگران برام راحته.",
-        "نگرانم که دیگران من رو دوست نداشته باشند و ترکم کنند.",
-        "وقتی شریک عاطفیام از من فاصله می‌گیره خیلی ناراحت میشم."
+        "نزدیکی عاطفی با دیگران برای من راحت است.",
+        "نگرانم که دیگران من را دوست نداشته باشند و ترکم کنند.",
+        "وقتی شریک عاطفی‌ام از من فاصله می‌گیرد خیلی ناراحت می‌شوم."
     ];
+    
     const qContainer = document.getElementById("qContainer");
     questions.forEach((q, idx) => {
         const div = document.createElement("div");
@@ -358,66 +311,122 @@
         </select>`;
         qContainer.appendChild(div);
     });
-
-    document.getElementById("submitQuiz").onclick = () => {
+    
+    document.getElementById("submitQuizBtn").onclick = async () => {
         let scores = [0,1,2].map(i => parseInt(document.getElementById(`q${i}`).value));
         let total = scores.reduce((a,b)=>a+b,0);
         let interpretation = "";
-        if (total <= 7) interpretation = "سبک دلبستگی **اجتنابی**: استقلال بالا، اما ممکن است صمیمیت عمیق برات دشوار باشه.";
-        else if (total <= 12) interpretation = "سبک دلبستگی **ایمن**: توانایی خوب در ایجاد روابط متوازن و صمیمی.";
-        else interpretation = "سبک دلبستگی **اضطرابی/دوسوگرا**: تمایل به نگرانی در روابط، نیاز به اطمینان‌بخشی.";
+        if (total <= 7) interpretation = "سبک دلبستگی اجتنابی";
+        else if (total <= 12) interpretation = "سبک دلبستگی ایمن";
+        else interpretation = "سبک دلبستگی اضطرابی";
         
-        const resultDiv = document.getElementById("quizResult");
-        resultDiv.innerHTML = `<strong>نتیجه پرسشنامه:</strong> مجموع امتیاز ${total} <br> ${interpretation}<br><small>تفسیر خودکار و کاملاً آزمایشی — برای ارزیابی واقعی با متخصص مشورت کنید.</small>`;
-        resultDiv.style.display = "block";
+        await saveQuestionnaireResult("attachment_style", total, interpretation, scores);
+        document.getElementById("quizResult").innerHTML = `<div style="background:#e0e7ff; padding:15px; border-radius:10px; margin-top:15px">
+            <strong>نتیجه شما:</strong> امتیاز ${total} - ${interpretation}<br>
+            ✅ نتیجه در حساب شما ذخیره شد.
+        </div>`;
     };
+}
 
-    // ********** چکاپ روزانه + گزارش هوشمند (localStorage) *********
-    function getTodayKey() {
-        return new Date().toISOString().slice(0,10);
-    }
-
-    function saveMood() {
+function showMoodCheck() {
+    document.getElementById("dynamicContent").innerHTML = `
+        <div class="mood-box">
+            <h3><i class="fas fa-chart-line"></i> چکاپ روزانه</h3>
+            <label>کیفیت خواب:</label>
+            <select id="sleepQuality">
+                <option value="2">عالی</option><option value="1">متوسط</option><option value="0">بد</option>
+            </select>
+            <label>سطح اضطراب (۰ تا ۱۰):</label>
+            <input type="number" id="anxietyLevel" min="0" max="10" value="3">
+            <label>احساس غالب امروز:</label>
+            <select id="dominantEmotion">
+                <option>شاد/پر انرژی</option><option>خنثی/عادی</option>
+                <option>غمگین/بی حوصله</option><option>عصبانی/تحریک‌پذیر</option>
+            </select>
+            <button id="saveMoodBtn" class="btn-primary">ذخیره چکاپ امروز</button>
+            <div id="moodResult"></div>
+        </div>
+    `;
+    
+    document.getElementById("saveMoodBtn").onclick = async () => {
         const sleep = parseInt(document.getElementById("sleepQuality").value);
         const anxiety = parseInt(document.getElementById("anxietyLevel").value);
-        const emotion = document.getElementById("dominentEmotion").value;
-        const today = getTodayKey();
-        let moods = JSON.parse(localStorage.getItem("moodHistory")) || {};
-        moods[today] = { sleep, anxiety, emotion };
-        localStorage.setItem("moodHistory", JSON.stringify(moods));
-        showReport();
-        alert("✅ چکاپ امروز ذخیره شد.");
-    }
+        const emotion = document.getElementById("dominantEmotion").value;
+        await saveDailyCheck(sleep, anxiety, emotion);
+        document.getElementById("moodResult").innerHTML = `<div style="background:#e0e7ff; padding:15px; border-radius:10px; margin-top:15px">
+            ✅ چکاپ امروز ذخیره شد!
+        </div>`;
+    };
+}
 
-    function showReport() {
-        const moods = JSON.parse(localStorage.getItem("moodHistory")) || {};
-        const last7 = [];
-        const days = Object.keys(moods).sort().reverse().slice(0,7);
-        for(let d of days) last7.push(moods[d]);
-        if(last7.length === 0) {
-            document.getElementById("moodReport").innerHTML = "📊 هنوز داده‌ای ثبت نشده. حداقل یک روز ثبت کن تا گزارش هوشمند نمایش داده شود.";
-            return;
+async function showHistory() {
+    const { quizzes, moods } = await loadHistory();
+    let html = `<div class="history-card"><h3><i class="fas fa-history"></i> تاریخچه من</h3>`;
+    
+    if (quizzes.length > 0) {
+        html += `<h4 style="margin-top:20px">📋 نتایج پرسشنامه‌ها</h4>`;
+        quizzes.forEach(q => {
+            html += `<div class="history-item">📅 ${new Date(q.created_at).toLocaleDateString('fa-IR')} - ${q.quiz_type}: ${q.interpretation} (امتیاز ${q.score})</div>`;
+        });
+    }
+    
+    if (moods.length > 0) {
+        html += `<h4 style="margin-top:20px">😊 چکاپ‌های روزانه</h4>`;
+        moods.forEach(m => {
+            html += `<div class="history-item">📅 ${m.check_date} - اضطراب: ${m.anxiety_level}/10 - احساس: ${m.dominant_emotion}</div>`;
+        });
+    }
+    
+    if (quizzes.length === 0 && moods.length === 0) {
+        html += `<p>هنوز داده‌ای ثبت نکرده‌اید. از بخش‌های بالا شروع کنید.</p>`;
+    }
+    
+    html += `</div>`;
+    document.getElementById("dynamicContent").innerHTML = html;
+}
+
+document.getElementById("submitAuthBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const messageDiv = document.getElementById("authMessage");
+    
+    if (!email || !password) {
+        messageDiv.innerHTML = "<div class='error'>لطفا ایمیل و رمز عبور را وارد کنید</div>";
+        return;
+    }
+    
+    try {
+        if (authMode === "login") {
+            await signIn(email, password);
+            messageDiv.innerHTML = "<div class='success'>ورود موفق! در حال انتقال...</div>";
+            setTimeout(() => checkSession(), 1000);
+        } else {
+            await signUp(email, password);
+            messageDiv.innerHTML = "<div class='success'>ایمیل تأیید برای شما فرستاده شد. لطفاً ایمیل خود را بررسی کنید.</div>";
         }
-        let highAnxietyCount = last7.filter(m => m.anxiety >= 7).length;
-        let sadCount = last7.filter(m => m.emotion.includes("غمگین")).length;
-        let warning = "";
-        if(highAnxietyCount >= 3) warning = "⚠️ **هشدار**: در ۷ روز اخیر، ۳ روز یا بیشتر اضطراب بالای ۷ داشتی. پیشنهاد تمرین تنفس عمیق.";
-        else if(sadCount >= 3) warning = "🧘 توصیه به مراقبه و مراجعه به مشاور روانشناس: چند روز متوالی احساس غم غالب بوده.";
-        else warning = "✅ روند خلق و خو در وضعیت عادی است. به چکاپ روزانه ادامه بده.";
-        
-        document.getElementById("moodReport").innerHTML = `<strong>📈 گزارش هوشمند (۷ روز اخیر):</strong><br> روزهای ثبت شده: ${days.length} روز <br> تعداد روزهای با اضطراب بالا: ${highAnxietyCount}<br> ${warning}`;
+    } catch (error) {
+        messageDiv.innerHTML = `<div class='error'>${error.message}</div>`;
     }
+};
 
-    document.getElementById("saveMoodBtn").onclick = saveMood;
-    document.getElementById("dailyCheckBtn").onclick = () => { document.getElementById("dailyMoodSection").scrollIntoView({behavior:"smooth"}); };
-    // نمایش اولیه گزارش در صورت وجود اطلاعات
-    if(localStorage.getItem("moodHistory")) showReport();
-    else document.getElementById("moodReport").innerHTML = "برای شروع چکاپ امروز را ثبت کنید.";
-
-    // تابع بازشو برای پرسشنامه
-    window.openQuestionnaireModal = function(){
-        document.getElementById("questionnaireDemo").scrollIntoView({behavior:"smooth"});
+document.getElementById("switchAuthBtn").onclick = () => {
+    if (authMode === "login") {
+        authMode = "signup";
+        document.getElementById("authTitle").innerText = "ثبت‌نام در روان‌یار";
+        document.getElementById("submitAuthBtn").innerText = "ثبت‌نام";
+        document.getElementById("switchAuthBtn").innerHTML = "قبلاً ثبت‌نام کرده‌اید؟ وارد شوید";
+    } else {
+        authMode = "login";
+        document.getElementById("authTitle").innerText = "ورود به روان‌یار";
+        document.getElementById("submitAuthBtn").innerText = "ورود";
+        document.getElementById("switchAuthBtn").innerHTML = "ثبت‌نام نکرده‌اید؟ ثبت‌نام کنید";
     }
+    document.getElementById("authMessage").innerHTML = "";
+};
+
+document.getElementById("logoutBtn").onclick = signOut;
+
+checkSession();
 </script>
 </body>
 </html>
